@@ -113,3 +113,14 @@ Set `FLY_API_TOKEN` as a repository secret.
 
 See `AGENTS.md` for guidance on Ecto migrations, Oban workflows, LiveView practices,
 and MCP usage for Tidewave, Playwright, and Fly.io.
+
+### MCP Setup (Codex)
+
+This repo includes a project-scoped MCP config at `.codex/config.toml`. For Codex to load it,
+mark this project as **trusted** in your global Codex settings.
+
+Fly MCP server (optional):
+
+```
+fly mcp server --stream --bind-addr 127.0.0.1 --port 8080
+```
