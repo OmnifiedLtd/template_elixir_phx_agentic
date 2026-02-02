@@ -67,6 +67,26 @@ That command provisions a bucket and sets the required secrets on the app.
 mix test
 ```
 
+## Secrets Checklist
+
+GitHub Actions:
+
+- `FLY_API_TOKEN` (required for deploy workflow)
+
+Fly.io app secrets (set by `fly launch`, `fly postgres attach`, and `fly storage create`):
+
+- `DATABASE_URL`
+- `SECRET_KEY_BASE`
+- `AWS_ACCESS_KEY_ID`
+- `AWS_SECRET_ACCESS_KEY`
+- `AWS_ENDPOINT_URL_S3`
+- `AWS_REGION`
+- `BUCKET_NAME`
+
+Local testing (optional):
+
+- No extra secrets required. Tests use a storage mock and local Postgres credentials from `config/test.exs`.
+
 ## Fly.io Deployment
 
 1. Update `fly.toml` with your app name and `PHX_HOST`.
