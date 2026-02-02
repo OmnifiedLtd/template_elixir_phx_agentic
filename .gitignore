@@ -35,3 +35,4 @@ phx_agentic_template-*.tar
 npm-debug.log
 /assets/node_modules/
 
+firebase-debug.log
