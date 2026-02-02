@@ -1,0 +1,70 @@
+<Layouts.app flash={@flash} current_scope={@current_scope}>
+  <div class="grid gap-12 lg:grid-cols-[1.1fr_0.9fr]">
+    <section class="space-y-6">
+      <p class="text-xs uppercase tracking-[0.3em] text-slate-400">AI-ready Phoenix Template</p>
+      <h1 class="text-4xl font-semibold text-slate-900 sm:text-5xl">
+        Build with agents, ship with confidence.
+      </h1>
+      <p class="text-base leading-7 text-slate-600">
+        This template pairs Phoenix + LiveView with Oban job queues, auth by default, Fly.io
+        deployment, and Tigris object storage. Everything is wired for agent-driven workflows.
+      </p>
+      <div class="flex flex-wrap gap-3">
+        <%= if @current_scope && @current_scope.user do %>
+          <.link
+            navigate={~p"/queues"}
+            class="rounded-full bg-slate-900 px-4 py-2 text-xs font-semibold uppercase tracking-widest text-white transition hover:bg-slate-800"
+          >
+            Manage queues
+          </.link>
+          <.link
+            navigate={~p"/storage"}
+            class="rounded-full border border-slate-200 px-4 py-2 text-xs font-semibold uppercase tracking-widest text-slate-700 transition hover:border-slate-300 hover:text-slate-900"
+          >
+            Explore storage
+          </.link>
+        <% else %>
+          <.link
+            href={~p"/users/register"}
+            class="rounded-full bg-slate-900 px-4 py-2 text-xs font-semibold uppercase tracking-widest text-white transition hover:bg-slate-800"
+          >
+            Create account
+          </.link>
+          <.link
+            href={~p"/users/log-in"}
+            class="rounded-full border border-slate-200 px-4 py-2 text-xs font-semibold uppercase tracking-widest text-slate-700 transition hover:border-slate-300 hover:text-slate-900"
+          >
+            Log in
+          </.link>
+        <% end %>
+      </div>
+    </section>
+
+    <section class="space-y-4">
+      <div class="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
+        <h2 class="text-base font-semibold text-slate-900">What ships in this template</h2>
+        <div class="mt-4 grid gap-4 text-sm text-slate-600">
+          <div class="rounded-2xl border border-slate-100 bg-slate-50/70 p-4">
+            <p class="font-semibold text-slate-800">Live Oban control</p>
+            <p class="mt-1">Start, pause, stop, and resume queues with live queue statistics.</p>
+          </div>
+          <div class="rounded-2xl border border-slate-100 bg-slate-50/70 p-4">
+            <p class="font-semibold text-slate-800">Agent-first guidance</p>
+            <p class="mt-1">AGENTS.md documents Ecto, Oban, and LiveView best practices.</p>
+          </div>
+          <div class="rounded-2xl border border-slate-100 bg-slate-50/70 p-4">
+            <p class="font-semibold text-slate-800">Fly.io + Tigris</p>
+            <p class="mt-1">Ready for continuous deployment with storage examples included.</p>
+          </div>
+        </div>
+      </div>
+      <div class="rounded-3xl border border-slate-200 bg-slate-900 px-6 py-6 text-slate-100">
+        <p class="text-xs uppercase tracking-[0.3em] text-slate-400">Next steps</p>
+        <p class="mt-3 text-sm">
+          Read the README for setup instructions, run the migrations, and use the queue dashboard
+          to observe live job processing.
+        </p>
+      </div>
+    </section>
+  </div>
+</Layouts.app>

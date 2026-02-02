@@ -1,0 +1,17 @@
+app = "phx-agentic-template"
+primary_region = "ord"
+
+[build]
+
+[env]
+  PHX_HOST = "phx-agentic-template.fly.dev"
+  PORT = "8080"
+  PHX_SERVER = "true"
+
+[http_service]
+  internal_port = 8080
+  force_https = true
+  auto_stop_machines = "stop"
+  auto_start_machines = true
+  min_machines_running = 0
+  processes = ["app"]
