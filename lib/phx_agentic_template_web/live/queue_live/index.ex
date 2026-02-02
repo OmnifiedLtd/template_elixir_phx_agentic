@@ -80,6 +80,39 @@ defmodule PhxAgenticTemplateWeb.QueueLive.Index do
   defp status_class(:paused), do: "bg-amber-100 text-amber-800"
   defp status_class(:stopped), do: "bg-slate-200 text-slate-700"
 
+  # Button availability based on queue state
+  defp can_start?(status), do: status == :stopped
+  defp can_stop?(status), do: status in [:running, :paused]
+  defp can_pause?(status), do: status == :running
+  defp can_resume?(status), do: status == :paused
+  # Jobs can always be enqueued - they're stored in DB and processed when queue runs
+  defp can_enqueue?(_status), do: true
+
+  defp button_class(enabled, color) do
+    base = "rounded-full px-3 py-1 text-xs font-semibold transition"
+
+    if enabled do
+      case color do
+        :emerald ->
+          "#{base} border border-emerald-200 text-emerald-700 hover:border-emerald-300 hover:text-emerald-800"
+
+        :slate ->
+          "#{base} border border-slate-200 text-slate-600 hover:border-slate-300 hover:text-slate-900"
+
+        :amber ->
+          "#{base} border border-amber-200 text-amber-700 hover:border-amber-300 hover:text-amber-800"
+
+        :sky ->
+          "#{base} border border-sky-200 text-sky-700 hover:border-sky-300 hover:text-sky-800"
+
+        :violet ->
+          "#{base} border border-violet-200 text-violet-700 hover:border-violet-300 hover:text-violet-800"
+      end
+    else
+      "#{base} border border-slate-100 text-slate-300 cursor-not-allowed"
+    end
+  end
+
   defp timestamp(nil), do: "—"
 
   defp timestamp(value) do
@@ -145,46 +178,51 @@ defmodule PhxAgenticTemplateWeb.QueueLive.Index do
                       <div class="flex flex-wrap gap-2">
                         <button
                           id={"queue-start-#{queue.name}"}
-                          phx-click="queue-action"
+                          phx-click={can_start?(queue.status) && "queue-action"}
                           phx-value-queue={queue.name}
                           phx-value-action="start"
-                          class="rounded-full border border-emerald-200 px-3 py-1 text-xs font-semibold text-emerald-700 transition hover:border-emerald-300 hover:text-emerald-800"
+                          disabled={not can_start?(queue.status)}
+                          class={button_class(can_start?(queue.status), :emerald)}
                         >
                           Start
                         </button>
                         <button
                           id={"queue-stop-#{queue.name}"}
-                          phx-click="queue-action"
+                          phx-click={can_stop?(queue.status) && "queue-action"}
                           phx-value-queue={queue.name}
                           phx-value-action="stop"
-                          class="rounded-full border border-slate-200 px-3 py-1 text-xs font-semibold text-slate-600 transition hover:border-slate-300 hover:text-slate-900"
+                          disabled={not can_stop?(queue.status)}
+                          class={button_class(can_stop?(queue.status), :slate)}
                         >
                           Stop
                         </button>
                         <button
                           id={"queue-pause-#{queue.name}"}
-                          phx-click="queue-action"
+                          phx-click={can_pause?(queue.status) && "queue-action"}
                           phx-value-queue={queue.name}
                           phx-value-action="pause"
-                          class="rounded-full border border-amber-200 px-3 py-1 text-xs font-semibold text-amber-700 transition hover:border-amber-300 hover:text-amber-800"
+                          disabled={not can_pause?(queue.status)}
+                          class={button_class(can_pause?(queue.status), :amber)}
                         >
                           Pause
                         </button>
                         <button
                           id={"queue-resume-#{queue.name}"}
-                          phx-click="queue-action"
+                          phx-click={can_resume?(queue.status) && "queue-action"}
                           phx-value-queue={queue.name}
                           phx-value-action="resume"
-                          class="rounded-full border border-sky-200 px-3 py-1 text-xs font-semibold text-sky-700 transition hover:border-sky-300 hover:text-sky-800"
+                          disabled={not can_resume?(queue.status)}
+                          class={button_class(can_resume?(queue.status), :sky)}
                         >
                           Resume
                         </button>
                         <button
                           id={"queue-demo-#{queue.name}"}
-                          phx-click="enqueue-demo"
+                          phx-click={can_enqueue?(queue.status) && "enqueue-demo"}
                           phx-value-queue={queue.name}
                           phx-value-count="10"
-                          class="rounded-full border border-violet-200 px-3 py-1 text-xs font-semibold text-violet-700 transition hover:border-violet-300 hover:text-violet-800"
+                          disabled={not can_enqueue?(queue.status)}
+                          class={button_class(can_enqueue?(queue.status), :violet)}
                         >
                           Enqueue demo
                         </button>
