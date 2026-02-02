@@ -63,7 +63,10 @@ defmodule PhxAgenticTemplate.Queues do
     end)
   end
 
-  def start_queue(queue) when is_binary(queue), do: Oban.start_queue(queue: queue)
+  def start_queue(queue) when is_binary(queue) do
+    limit = Map.get(configured_queue_limits(), queue, 10)
+    Oban.start_queue(queue: queue, limit: limit)
+  end
 
   def stop_queue(queue) when is_binary(queue), do: Oban.stop_queue(queue: queue)
 
