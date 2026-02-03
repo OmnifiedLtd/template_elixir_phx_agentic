@@ -35,6 +35,24 @@ mix phx.server
 
 Visit `http://localhost:4000` and register an account at `/users/register`.
 
+## Email Delivery (SMTP)
+
+Production email delivery uses the SMTP adapter. Configure these Fly.io secrets:
+
+- `SMTP_RELAY`
+- `SMTP_USERNAME`
+- `SMTP_PASSWORD`
+- `SMTP_PORT` (defaults to `587`)
+- `SMTP_SSL` (`true` or `false`)
+
+Example:
+
+```
+fly secrets set SMTP_RELAY="smtp.example.com" SMTP_USERNAME="user" SMTP_PASSWORD="pass" SMTP_PORT="587" SMTP_SSL="false"
+```
+
+If email delivery fails, the app logs the error and shows a friendly message instead of crashing.
+
 ## Queue Dashboard
 
 The queue dashboard is available at `/queues` after login. It allows you to:
@@ -77,6 +95,11 @@ Fly.io app secrets (set by `fly launch`, `fly postgres attach`, and `fly storage
 
 - `DATABASE_URL`
 - `SECRET_KEY_BASE`
+- `SMTP_RELAY`
+- `SMTP_USERNAME`
+- `SMTP_PASSWORD`
+- `SMTP_PORT`
+- `SMTP_SSL`
 - `AWS_ACCESS_KEY_ID`
 - `AWS_SECRET_ACCESS_KEY`
 - `AWS_ENDPOINT_URL_S3`

@@ -4,6 +4,8 @@ defmodule PhxAgenticTemplate.Accounts.UserNotifier do
   alias PhxAgenticTemplate.Mailer
   alias PhxAgenticTemplate.Accounts.User
 
+  require Logger
+
   # Delivers the email using the application mailer.
   defp deliver(recipient, subject, body) do
     email =
@@ -13,8 +15,23 @@ defmodule PhxAgenticTemplate.Accounts.UserNotifier do
       |> subject(subject)
       |> text_body(body)
 
-    with {:ok, _metadata} <- Mailer.deliver(email) do
-      {:ok, email}
+    case safe_deliver(email) do
+      {:ok, _metadata} ->
+        {:ok, email}
+
+      {:error, reason} ->
+        Logger.error("Email delivery failed", reason: inspect(reason))
+        {:error, reason}
+    end
+  end
+
+  defp safe_deliver(email) do
+    try do
+      Mailer.deliver(email)
+    rescue
+      exception -> {:error, exception}
+    catch
+      :exit, reason -> {:error, reason}
     end
   end
 

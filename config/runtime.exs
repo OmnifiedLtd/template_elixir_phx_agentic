@@ -135,6 +135,18 @@ if config_env() == :prod do
   #       api_key: System.get_env("MAILGUN_API_KEY"),
   #       domain: System.get_env("MAILGUN_DOMAIN")
   #
+  # Example configuration for SMTP:
+  #
+  #     config :phx_agentic_template, PhxAgenticTemplate.Mailer,
+  #       adapter: Swoosh.Adapters.SMTP,
+  #       relay: System.get_env("SMTP_RELAY"),
+  #       username: System.get_env("SMTP_USERNAME"),
+  #       password: System.get_env("SMTP_PASSWORD"),
+  #       port: String.to_integer(System.get_env("SMTP_PORT") || "587"),
+  #       ssl: System.get_env("SMTP_SSL") in ~w(true 1),
+  #       tls: :if_available,
+  #       auth: :always
+  #
   # Most non-SMTP adapters require an API client. Swoosh supports Req, Hackney,
   # and Finch out-of-the-box. This configuration is typically done at
   # compile-time in your config/prod.exs:
@@ -142,4 +154,13 @@ if config_env() == :prod do
   #     config :swoosh, :api_client, Swoosh.ApiClient.Req
   #
   # See https://hexdocs.pm/swoosh/Swoosh.html#module-installation for details.
+  config :phx_agentic_template, PhxAgenticTemplate.Mailer,
+    adapter: Swoosh.Adapters.SMTP,
+    relay: System.get_env("SMTP_RELAY"),
+    username: System.get_env("SMTP_USERNAME"),
+    password: System.get_env("SMTP_PASSWORD"),
+    port: String.to_integer(System.get_env("SMTP_PORT") || "587"),
+    ssl: System.get_env("SMTP_SSL") in ~w(true 1),
+    tls: :if_available,
+    auth: :always
 end
