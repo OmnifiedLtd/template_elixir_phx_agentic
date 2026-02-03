@@ -20,6 +20,6 @@ primary_region = "ord"
   release_command = "/app/bin/migrate"
 
 [[vm]]
-  memory = "512mb"
+  memory = "1024mb"
   cpu_kind = "shared"
   cpus = 1
