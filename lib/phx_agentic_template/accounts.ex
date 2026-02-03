@@ -60,6 +60,11 @@ defmodule PhxAgenticTemplate.Accounts do
   """
   def get_user!(id), do: Repo.get!(User, id)
 
+  def password_auth_enabled? do
+    Application.get_env(:phx_agentic_template, :auth, [])
+    |> Keyword.get(:password_auth_enabled, false)
+  end
+
   ## User registration
 
   @doc """
@@ -75,9 +80,22 @@ defmodule PhxAgenticTemplate.Accounts do
 
   """
   def register_user(attrs) do
+    password_auth_enabled = password_auth_enabled?()
+
     %User{}
     |> User.email_changeset(attrs)
+    |> maybe_password_changeset(attrs, password_auth_enabled, hash_password: true)
+    |> maybe_confirm_changeset(password_auth_enabled)
     |> Repo.insert()
+  end
+
+  def change_user_registration(attrs \\ %{}, opts \\ []) do
+    password_auth_enabled = Keyword.get(opts, :password_auth_enabled, password_auth_enabled?())
+    validate_unique = Keyword.get(opts, :validate_unique, true)
+
+    %User{}
+    |> User.email_changeset(attrs, validate_unique: validate_unique)
+    |> maybe_password_changeset(attrs, password_auth_enabled, hash_password: false)
   end
 
   ## Settings
@@ -294,4 +312,16 @@ defmodule PhxAgenticTemplate.Accounts do
       end
     end)
   end
+
+  defp maybe_password_changeset(changeset, attrs, true, opts) do
+    User.password_changeset(changeset, attrs, opts)
+  end
+
+  defp maybe_password_changeset(changeset, _attrs, false, _opts), do: changeset
+
+  defp maybe_confirm_changeset(changeset, true) do
+    Ecto.Changeset.change(changeset, confirmed_at: DateTime.utc_now(:second))
+  end
+
+  defp maybe_confirm_changeset(changeset, false), do: changeset
 end

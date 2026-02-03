@@ -25,6 +25,17 @@ defmodule PhxAgenticTemplateWeb.UserLive.Login do
           </.header>
         </div>
 
+        <div :if={@password_auth_enabled} class="alert alert-warning">
+          <.icon name="hero-exclamation-triangle" class="size-6 shrink-0" />
+          <div>
+            <p>Password sign-in is enabled for production testing.</p>
+            <p>
+              Before go-live, disable it with <code>PASSWORD_AUTH_ENABLED=false</code> and
+              switch to magic links.
+            </p>
+          </div>
+        </div>
+
         <div :if={local_mail_adapter?()} class="alert alert-info">
           <.icon name="hero-information-circle" class="size-6 shrink-0" />
           <div>
@@ -36,7 +47,6 @@ defmodule PhxAgenticTemplateWeb.UserLive.Login do
         </div>
 
         <.form
-          :let={f}
           for={@form}
           id="login_form_magic"
           action={~p"/users/log-in"}
@@ -44,7 +54,8 @@ defmodule PhxAgenticTemplateWeb.UserLive.Login do
         >
           <.input
             readonly={!!@current_scope}
-            field={f[:email]}
+            field={@form[:email]}
+            id="login_form_magic_email"
             type="email"
             label="Email"
             autocomplete="email"
@@ -59,7 +70,6 @@ defmodule PhxAgenticTemplateWeb.UserLive.Login do
         <div class="divider">or</div>
 
         <.form
-          :let={f}
           for={@form}
           id="login_form_password"
           action={~p"/users/log-in"}
@@ -68,7 +78,8 @@ defmodule PhxAgenticTemplateWeb.UserLive.Login do
         >
           <.input
             readonly={!!@current_scope}
-            field={f[:email]}
+            field={@form[:email]}
+            id="login_form_password_email"
             type="email"
             label="Email"
             autocomplete="email"
@@ -100,7 +111,12 @@ defmodule PhxAgenticTemplateWeb.UserLive.Login do
 
     form = to_form(%{"email" => email}, as: "user")
 
-    {:ok, assign(socket, form: form, trigger_submit: false)}
+    {:ok,
+     assign(socket,
+       form: form,
+       trigger_submit: false,
+       password_auth_enabled: Accounts.password_auth_enabled?()
+     )}
   end
 
   @impl true

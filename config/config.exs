@@ -24,6 +24,8 @@ config :phx_agentic_template,
   ecto_repos: [PhxAgenticTemplate.Repo],
   generators: [timestamp_type: :utc_datetime, binary_id: true]
 
+config :phx_agentic_template, :auth, password_auth_enabled: false
+
 config :phx_agentic_template, Oban,
   repo: PhxAgenticTemplate.Repo,
   plugins: [Oban.Plugins.Pruner],

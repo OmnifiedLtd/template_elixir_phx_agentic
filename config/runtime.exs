@@ -93,6 +93,16 @@ if config_env() == :prod do
     ],
     secret_key_base: secret_key_base
 
+  # Enable password sign-in by default for quick production testing.
+  # Set PASSWORD_AUTH_ENABLED=false before go-live to enforce magic links.
+  password_auth_enabled =
+    case System.get_env("PASSWORD_AUTH_ENABLED") do
+      nil -> true
+      value -> value in ~w(true 1)
+    end
+
+  config :phx_agentic_template, :auth, password_auth_enabled: password_auth_enabled
+
   # ## SSL Support
   #
   # To get SSL working, you will need to add the `https` key
