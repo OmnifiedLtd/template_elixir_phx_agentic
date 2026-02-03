@@ -1,0 +1,5 @@
+#!/bin/sh
+set -eu
+
+cd -P -- "$(dirname -- "$0")"
+exec ./phx_agentic_template eval PhxAgenticTemplate.Release.migrate
