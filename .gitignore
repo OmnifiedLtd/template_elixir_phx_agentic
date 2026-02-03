@@ -36,3 +36,6 @@ npm-debug.log
 /assets/node_modules/
 
 firebase-debug.log
+
+# Playwright MCP artifacts
+.playwright-mcp/
